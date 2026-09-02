@@ -759,7 +759,8 @@ impl ClientBuilder {
                     }
 
                     // Allow user to have installed a runtime default.
-                    // If not, we use ring.
+                    // If not, we use aws-lc-rs, which is what the
+                    // __rustls-ring arm compiles in here.
                     let provider = rustls::crypto::CryptoProvider::get_default()
                         .map(|arc| arc.clone())
                         .unwrap_or_else(|| {
@@ -767,7 +768,7 @@ impl ClientBuilder {
                             panic!("No provider set");
 
                             #[cfg(feature = "__rustls-ring")]
-                            Arc::new(rustls::crypto::ring::default_provider())
+                            Arc::new(rustls::crypto::aws_lc_rs::default_provider())
                         });
 
                     // Build TLS config
